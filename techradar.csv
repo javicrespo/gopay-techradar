@@ -1,2 +1,2 @@
-"name","ring","quadrant","Description"
-Kafka, Trial, Platforms, "Test"
+"name","ring","quadrant","isNew","Description"
+Kafka, Trial, Platforms, FALSE, "Test"
