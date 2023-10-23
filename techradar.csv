@@ -1,2 +1,23 @@
-"name","ring","quadrant","isNew","description"
-Kafka,Trial,Platforms,FALSE,"Test"
+name,ring,quadrant,isNew,description
+Kafka,Trial,Platforms,FALSE,"Apache Kafka is a distributed event store and stream-processing platform.  In our opitinion, Kafka would be a better fit for some of the use cases where GoPay currently uses RabbitMQ. In particular, the payment polling event streamer would benefit from a Kafka setup because it would allow subscribers to consume events at their own pace, rewind without impacting other consumers, etc. This flexibility is hard to achieve in a standard Pub/Sub model powered by RabbitMQ."
+Redis,Trial,Platforms,FALSE,"Redis is an open-source in-memory storage, used as a distributed, in-memory key–value database, cache and message broker, with optional durability. Redis could be useful to reduce the load on the Database layer while also providing improved response times to our customers."
+Cassandra,Trial,Platforms,FALSE,"Cassandra is an open-source, distributed, wide-column store, NoSQL database management system designed to handle large amounts of data across many commodity servers, providing high availability with no single point of failure. The use of Cassandra for some particular use cases (e.g. payment storage for online transactions a.k.a Super Live) should allow GoPay to scale linearly and improve the platform's availability."
+Microsoft SQL Server,Adopt,Platforms,FALSE,"Microsoft SQL server is GoPay's standard RDBMS solution. While we are currently exploring other storage options for some specific use cases (e.g. Cassandra), SQL remains GoPay's the general purpose standard solution."
+ESF,Adopt,Languages & Frameworks,FALSE,ESF is GoPay's implementation of the microservice's chassis pattern.  ESF solves microservice plumbing concerns (e.g. standard communication and operational interfaces) so engineers can focus on delivering business value.
+.NET core 2.1/3.1,Hold,Languages & Frameworks,FALSE,.NET Core 2.1 and 3.1 are end of life out of support. ESF 6 (Long Term Support version) needs to be used instead.
+React.js,Adopt,Languages & Frameworks,FALSE,React is an  open-source front-end JavaScript library for building user interfaces based on components. React.js is the standard client framework at GoPay.
+Database per service,Adopt,Techniques,FALSE,Keep each microservice’s persistent data private to that service and accessible only via its API
+Unreliable event delivery,Hold,Techniques,FALSE,"This typically occurs when a component needs to store its state in a DB and then send an event (e.g. og-payment with MNS). In the absence of a transacational delivery pattern (e.g. Polling Subscriber, Outbox pattern, Transactional log tailing), inconsistencies will arise (e.g. if the queueing system is unavailable, the component will update the db but will fail when emmiting the event)."
+Transactional Outbox pattern,Assess,Techniques,FALSE,This pattern provides a solution to atomically update service state and publish events: the service stores the event in the database as part of the transaction that updates the business entities. A separate service background process then sends the events to the message broker (e.g: RabbitMQ or Kafka)
+Payment Polling Publisher (a.k.a. SuperPoller),Adopt,Techniques,FALSE,"This is GoPay's implementation of the Polling Publisher pattern. This component allows to reliable publish payment related events with no impact to existing payment processes (e.g. it extracts data from the db, legacy components are not impacted)."
+Podman,Adopt,Tools,FALSE,"Podman (the POD manager) is an open source tool for developing, managing, and running containers on Linux systems. Podman is a free in-place replacement for Docker for windows/Desktop, which is no longer free."
+Kubernetes,Assess,Platforms,FALSE,"Kubernetes (K8S) is an open-source container orchestration system for automating software deployment, scaling, and management. K8S is the standard the facto platform for container orchestration and it's definitely on the radar for GoPay's journey towards containerization."
+Google Gloud (GCP),Trial,Platforms,FALSE,Worldline's Go to Cloud strategy fosters moving workloads to the public cloud in general and GCP in particular (preferred provider).
+Kazan,Adopt,Tools,FALSE,Kazan is Wordline's suite of CI/CD products. GoPay will migrate in the coming months from atlassian's stack (bitbucket/bamboo) to Kazan's gitlab powered stack.
+Linux containers,Adopt,Tools,FALSE,"Linux based containers is a very important step in GoPay's containerization journey. Linux containers will deliver both short term gains, such as easier and a faster container driven testing strategy, and long term, hard requirement for Kubernetes adoption."
+Istio,Assess,Languages & Frameworks,FALSE,Istio is a service mesh—a modernized service networking layer that provides a transparent and language-independent way to flexibly and easily automate application network functions. Istio could be the foundation in which ESF would sit in a Kubernetes powered platform.
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
